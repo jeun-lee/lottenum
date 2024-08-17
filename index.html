@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>로또 번호 추출하기</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="box">
+        <div class="day">
+            <p>이번 주 토요일 : <span id="saturday-date"></span></p>
+        </div>
+        <button id="generate" type="button">로또 번호 클릭</button>
+        <div id="result">행운을 빕니다!!</div>
+    </div>
+
+    <script>
+        function generateLottoNumbers() {
+            const numbers = [];
+
+            while(numbers.length < 6) {
+                let num = Math.floor(Math.random() * 45) + 1;
+                if(numbers.indexOf(num) === -1){
+                    numbers.push(num);
+                }
+            } 
+            return numbers.sort((a, b) => a - b);
+        }
+        $(document).ready(function() {
+            $("#generate").click(function(){
+                const lottoNumbers = generateLottoNumbers();
+                $("#result").text("로또 번호 : " + lottoNumbers.join(", "));
+            });
+        });
+        function getNextSaturday() {
+                var today = new Date();
+                var dayOfWeek = today.getDay(); // 일요일: 0, 월요일: 1, ..., 토요일: 6
+                var daysUntilSaturday = (6 - dayOfWeek + 7) % 7; // 현재 요일부터 다음 토요일까지의 일수
+
+                var saturday = new Date(today);
+                saturday.setDate(today.getDate() + daysUntilSaturday);
+
+                return saturday;
+            }
+
+            function formatDate(date) {
+                var day = String(date.getDate()).padStart(2, '0');
+                var month = String(date.getMonth() + 1).padStart(2, '0');
+                var year = date.getFullYear();
+                return `${year}-${month}-${day}`;
+            }
+
+            var saturdayDate = getNextSaturday();
+            $('#saturday-date').text(formatDate(saturdayDate));
+    </script>
+</body>
+</html>
